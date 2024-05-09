@@ -30,7 +30,7 @@ public class GrassBendingRTPrePass : ScriptableRendererFeature
         // You don't have to call ScriptableRenderContext.submit, the render pipeline will call it at specific points in the pipeline.
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (!InstancedIndirectGrassRenderer.instance)
+            if (!InstancedIndirectGrassRenderer.Instance)
             {
                 Debug.LogWarning("InstancedIndirectGrassRenderer not found, abort GrassBendingRTPrePass's Execute");
                 return;
@@ -41,11 +41,11 @@ public class GrassBendingRTPrePass : ScriptableRendererFeature
             //make a new view matrix that is the same as an imaginary camera above grass center 1 units and looking at grass(bird view)
             //scale.z is -1 because view space will look into -Z while world space will look into +Z
             //camera transform's local to world's inverse means camera's world to view = world to local
-            Matrix4x4 viewMatrix = Matrix4x4.TRS(InstancedIndirectGrassRenderer.instance.transform.position + new Vector3(0, 1, 0),Quaternion.LookRotation(-Vector3.up), new Vector3(1,1,-1)).inverse;
+            Matrix4x4 viewMatrix = Matrix4x4.TRS(InstancedIndirectGrassRenderer.Instance.transform.position + new Vector3(0, 1, 0),Quaternion.LookRotation(-Vector3.up), new Vector3(1,1,-1)).inverse;
 
             //ortho camera with 1:1 aspect, size = 50
-            float sizeX = InstancedIndirectGrassRenderer.instance.transform.localScale.x;
-            float sizeZ = InstancedIndirectGrassRenderer.instance.transform.localScale.z;
+            float sizeX = InstancedIndirectGrassRenderer.Instance.bounds.x * 2;
+            float sizeZ = InstancedIndirectGrassRenderer.Instance.bounds.y * 2;
             Matrix4x4 projectionMatrix = Matrix4x4.Ortho(-sizeX,sizeX, -sizeZ, sizeZ, 0.5f, 1.5f);
 
             //override view & Projection matrix

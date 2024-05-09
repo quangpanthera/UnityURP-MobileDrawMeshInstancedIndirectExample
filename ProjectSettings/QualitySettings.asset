@@ -27,6 +27,7 @@ QualitySettings:
     realtimeReflectionProbes: 0
     billboardsFaceCameraPosition: 0
     vSyncCount: 0
+    realtimeGICPUUsage: 25
     lodBias: 1
     maximumLODLevel: 0
     streamingMipmapsActive: 0
@@ -40,14 +41,14 @@ QualitySettings:
     asyncUploadBufferSize: 16
     asyncUploadPersistentBuffer: 1
     resolutionScalingFixedDPIFactor: 1
-    customRenderPipeline: {fileID: 11400000, guid: 67e17f87458eb844a9a8fd6f37c788ac,
-      type: 2}
+    customRenderPipeline: {fileID: 11400000, guid: 67e17f87458eb844a9a8fd6f37c788ac, type: 2}
     excludedTargetPlatforms: []
   m_PerPlatformDefaultQuality:
     Android: 0
     Lumin: 0
     Nintendo Switch: 0
     PS4: 0
+    Server: 0
     Stadia: 0
     Standalone: 0
     WebGL: 0
