@@ -9,6 +9,7 @@ public class GrassBendingRTPrePass : ScriptableRendererFeature
         static readonly int _GrassBendingRT_pid = Shader.PropertyToID("_GrassBendingRT");
         static readonly RenderTargetIdentifier _GrassBendingRT_rti = new RenderTargetIdentifier(_GrassBendingRT_pid);
         ShaderTagId GrassBending_stid = new ShaderTagId("GrassBending");
+        InstancedIndirectGrassRenderer renderer;
 
         // This method is called before executing the render pass.
         // It can be used to configure render targets and their clear state. Also to create temporary render target textures.
@@ -30,9 +31,13 @@ public class GrassBendingRTPrePass : ScriptableRendererFeature
         // You don't have to call ScriptableRenderContext.submit, the render pipeline will call it at specific points in the pipeline.
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (!InstancedIndirectGrassRenderer.Instance)
+            if (!renderer)
             {
-                Debug.LogWarning("InstancedIndirectGrassRenderer not found, abort GrassBendingRTPrePass's Execute");
+                renderer = FindObjectOfType<InstancedIndirectGrassRenderer>();
+            }
+
+            if (!renderer)
+            {
                 return;
             }
 
@@ -41,11 +46,11 @@ public class GrassBendingRTPrePass : ScriptableRendererFeature
             //make a new view matrix that is the same as an imaginary camera above grass center 1 units and looking at grass(bird view)
             //scale.z is -1 because view space will look into -Z while world space will look into +Z
             //camera transform's local to world's inverse means camera's world to view = world to local
-            Matrix4x4 viewMatrix = Matrix4x4.TRS(InstancedIndirectGrassRenderer.Instance.transform.position + new Vector3(0, 1, 0),Quaternion.LookRotation(-Vector3.up), new Vector3(1,1,-1)).inverse;
+            Matrix4x4 viewMatrix = Matrix4x4.TRS(renderer.transform.position + new Vector3(0, 1, 0),Quaternion.LookRotation(-Vector3.up), new Vector3(1,1,-1)).inverse;
 
             //ortho camera with 1:1 aspect, size = 50
-            float sizeX = InstancedIndirectGrassRenderer.Instance.bounds.x * 2;
-            float sizeZ = InstancedIndirectGrassRenderer.Instance.bounds.y * 2;
+            float sizeX = renderer.bounds.x;
+            float sizeZ = renderer.bounds.y;
             Matrix4x4 projectionMatrix = Matrix4x4.Ortho(-sizeX,sizeX, -sizeZ, sizeZ, 0.5f, 1.5f);
 
             //override view & Projection matrix

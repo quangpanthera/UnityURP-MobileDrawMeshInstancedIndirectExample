@@ -70,8 +70,8 @@ public class InstancedIndirectGrassRenderer : MonoBehaviour
         {
             var pos = Vector3.zero;
 
-            pos.x = Random.Range(-1f, 1f) * bounds.x;
-            pos.z = Random.Range(-1f, 1f) * bounds.y;
+            pos.x = Random.Range(-1f, 1f) * bounds.x / 2;
+            pos.z = Random.Range(-1f, 1f) * bounds.y / 2;
 
             pos += transform.position;
 
@@ -240,7 +240,7 @@ public class InstancedIndirectGrassRenderer : MonoBehaviour
     {
         //always update
         instanceMaterial.SetVector("_PivotPosWS", transform.position);
-        instanceMaterial.SetVector("_BoundSize", new Vector2(transform.localScale.x, transform.localScale.z));
+        instanceMaterial.SetVector("_BoundSize", bounds);
 
         //early exit if no need to update buffer
         if (instanceCountCache == allGrassPos.Count &&
